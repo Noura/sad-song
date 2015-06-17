@@ -44,25 +44,31 @@ window.onload = function() {
 
         source.start(0);
 
+        // TODO make filter.gsr not an attribute of the filter, just a global variable
+        // TODO noise is not the right audio effect, try others
         var start = 800; // this is when the song starts
         var end = 7060; // this is when the song ends
         var gsr = _.pluck(data, 'gsr').slice(start, end + 1);
-        var min = _.min(gsr);
-        var max = _.max(gsr);
+        var min = _.min(gsr) + 0.3;
+        var max = _.max(gsr) - 0.1;
         gsr = _.map(gsr, function(g) {
-            return (g - min) / (max - min);
+            return Math.max(0, Math.min(1, Math.abs((g - min) / (max - min))));
         });
         var i = start;
-        function change_noise_level() {
-            if (i >= data.length) {
+        function change_filter_param() {
+            if (i >= end) {
                 return;
             }
             filter.gsr = gsr[i];
             i += 1;
-            $(document).append('<div style="position:absolute; top:'+i*5+'; left:0; width:'+gsr[i]*500+'px; background:black;"></div>');
-            setTimeout(change_noise_level, 50);
+            $('body').append($(
+                '<div style="position:absolute; top:'+(i-start)*1+'px; left:0; width:'+gsr[i]*$(window).width()*0.4+'px; height:1px; background:black;"></div>'));
+            if ( i - start > $(window).scrollTop() + $(window).height()) {
+                $(window).scrollTop($(window).scrollTop() + 1);
+            }
+            setTimeout(change_filter_param, 20);
         };
-        change_noise_level();
+        change_filter_param();
     }
     proceed_when_ready();
 };
