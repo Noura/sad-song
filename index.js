@@ -59,6 +59,7 @@ window.onload = function() {
             }
             filter.gsr = gsr[i];
             i += 1;
+            $(document).append('<div style="position:absolute; top:'+i*5+'; left:0; width:'+gsr[i]*500+'px; background:black;"></div>');
             setTimeout(change_noise_level, 50);
         };
         change_noise_level();
