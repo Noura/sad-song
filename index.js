@@ -33,8 +33,9 @@ window.onload = function() {
             for (var channel = 0; channel < e.outputBuffer.numberOfChannels; channel++) {
                 var input = e.inputBuffer.getChannelData(channel);
                 var output = e.outputBuffer.getChannelData(channel);
+                var noise_level = filter.gsr * 0.2;
                 for (var sample = 0; sample < e.inputBuffer.length; sample++) {
-                    output[sample] = input[sample] * (1 - filter.gsr) + ((Math.random() * 2) - 1) * filter.gsr;
+                    output[sample] = input[sample] * (1 - noise_level) + ((Math.random() * 2) - 1) * noise_level;
                 }
             }
         };
@@ -43,15 +44,15 @@ window.onload = function() {
 
         source.start(0);
 
-        // TODO sync the data with the song listening
-        // the song ended at 4:43 from the end on the data recording
-        var i = 0;
-        var gsr = _.pluck(data, 'gsr');
+        var start = 800; // this is when the song starts
+        var end = 7060; // this is when the song ends
+        var gsr = _.pluck(data, 'gsr').slice(start, end + 1);
         var min = _.min(gsr);
         var max = _.max(gsr);
         gsr = _.map(gsr, function(g) {
             return (g - min) / (max - min);
         });
+        var i = start;
         function change_noise_level() {
             if (i >= data.length) {
                 return;
