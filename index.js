@@ -1,4 +1,6 @@
 window.onload = function() {
+    var filter_param = 0;
+
     var data = null;
     $.getJSON('data.json', function(d) {
         data = d;
@@ -28,14 +30,16 @@ window.onload = function() {
         source.buffer = buffer;
 
         var filter = context.createScriptProcessor(4096, 2, 2);
-        filter.gsr = 0;
         filter.onaudioprocess = function(e) {
             for (var channel = 0; channel < e.outputBuffer.numberOfChannels; channel++) {
                 var input = e.inputBuffer.getChannelData(channel);
                 var output = e.outputBuffer.getChannelData(channel);
-                var noise_level = filter.gsr * 0.2;
                 for (var sample = 0; sample < e.inputBuffer.length; sample++) {
-                    output[sample] = input[sample] * (1 - noise_level) + ((Math.random() * 2) - 1) * noise_level;
+                    // noise
+                    // var noise_level = filter_param * 0.1;
+                    // output[sample] = input[sample] * (1 - noise_level) + ((Math.random() * 2) - 1) * noise_level;
+                    //output[sample] = Math.floor(input[sample] * (1.0-filter_param) * 10) / ( (1.0-filter_param) * 10);
+                    output[sample] = Math.floor(input[sample] * 1.5) / 1.5;
                 }
             }
         };
@@ -44,7 +48,6 @@ window.onload = function() {
 
         source.start(0);
 
-        // TODO make filter.gsr not an attribute of the filter, just a global variable
         // TODO noise is not the right audio effect, try others
         var start = 800; // this is when the song starts
         var end = 7060; // this is when the song ends
@@ -59,7 +62,7 @@ window.onload = function() {
             if (i >= end) {
                 return;
             }
-            filter.gsr = gsr[i];
+            filter_param = gsr[i];
             i += 1;
             $('body').append($(
                 '<div style="position:absolute; top:'+(i-start)*1+'px; left:0; width:'+gsr[i]*$(window).width()*0.4+'px; height:1px; background:black;"></div>'));
