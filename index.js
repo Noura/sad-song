@@ -64,7 +64,7 @@ window.onload = function() {
         filter.connect(context.destination);
 
         // starting the audio
-        source.start(0);
+        source.start();
 
         //
         // changing the filter parameter based on the GSR readings
