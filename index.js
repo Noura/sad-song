@@ -32,6 +32,7 @@ window.onload = function() {
             return;
         }
         // OK ready now
+        console.log('ready. gsr data points:', data.length, 'audio buffer length:', buffer.length);
 
         // making the buffer an audio node
         var source = context.createBufferSource();
@@ -40,6 +41,7 @@ window.onload = function() {
         // our custom audio filter
         var filter = context.createScriptProcessor(4096, 2, 2);
         filter.onaudioprocess = function(e) {
+            console.log('filter');
             for (var channel = 0; channel < e.outputBuffer.numberOfChannels; channel++) {
                 var input = e.inputBuffer.getChannelData(channel);
                 var output = e.outputBuffer.getChannelData(channel);
@@ -92,7 +94,6 @@ window.onload = function() {
             if (i >= len) {
                 return;
             }
-            console.log('i', i, 'gsr', gsr[i]);
             filter_param = gsr[i];
             i += 1;
             $('body').append($(
