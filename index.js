@@ -81,7 +81,7 @@ window.onload = function() {
         // THEN LOAD SONG //////////////////
         //
         var request = new XMLHttpRequest();
-        request.open('GET', 'http://localhost:8000/animal_collective_peacebone.mp3', true);
+        request.open('GET', 'animal_collective_peacebone.mp3', true);
         request.responseType = 'arraybuffer';
         request.onload = function() {
             //
