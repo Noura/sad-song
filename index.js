@@ -1,4 +1,5 @@
-window.onload = function() {
+window.onclick = function() {
+    console.log('window onclick');
     //
     // SETUP //////////////////
     //
@@ -108,4 +109,4 @@ window.onload = function() {
         };
         request.send(); // end of loading song
     }); // end of loading GSR data
-}; // end of window.onload
+}; // end of window.onclick
